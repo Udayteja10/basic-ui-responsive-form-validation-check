@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Account Update Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #f8f9fa;
+    }
+
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+      margin-bottom: 4px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    input[type="submit"] {
+      width: 100%;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    h3 {
+      margin-top: 1.5rem;
+      font-size: 1.1rem;
+      color: #333;
+    }
+
+    ul {
+      padding: 0;
+      list-style: none;
+    }
+
+    li {
+      margin-bottom: 6px;
+      padding-left: 8px;
+      position: relative;
+    }
+
+    .valid {
+      color: green;
+    }
+
+    .invalid {
+      color: red;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 480px) {
+      .container {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Update Account</h2>
+
+    <form onsubmit="return validateForm()">
+      <label for="name">Name:</label>
+      <input type="text" id="name" oninput="checkConditions()">
+
+      <label for="email">Email:</label>
+      <input type="text" id="email" oninput="checkConditions()">
+
+      <label for="phone">Phone Number:</label>
+      <input type="text" id="phone" oninput="checkConditions()">
+
+      <label for="currentPassword">Current Password:</label>
+      <input type="password" id="currentPassword" oninput="checkConditions()">
+
+      <label for="confirmPassword">Confirm Password:</label>
+      <input type="password" id="confirmPassword" oninput="checkConditions()">
+
+      <input type="submit" value="Submit">
+    </form>
+
+    <h3>Form Conditions:</h3>
+    <ul>
+      <li id="nameCond" class="invalid">Name: At least 3 letters, alphabets only</li>
+      <li id="emailCond" class="invalid">Email: Must contain '@' and '.'</li>
+      <li id="phoneCond" class="invalid">Phone: Exactly 10 digits</li>
+      <li id="passCond" class="invalid">Password: At least 8 characters</li>
+      <li id="confirmPassCond" class="invalid">Confirm Password: Must match the password</li>
+    </ul>
+  </div>
+
+  <script>
+    function checkConditions() {
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const password = document.getElementById("currentPassword").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+
+      updateCondition("nameCond", /^[A-Za-z]{3,}$/.test(name));
+      updateCondition("emailCond", email.includes("@") && email.includes("."));
+      updateCondition("phoneCond", /^[0-9]{10}$/.test(phone));
+      updateCondition("passCond", password.length >= 8);
+      updateCondition("confirmPassCond", confirmPassword === password && password.length >= 8);
+    }
+
+    function updateCondition(id, isValid) {
+      const element = document.getElementById(id);
+      element.className = isValid ? "valid" : "invalid";
+    }
+
+    function validateForm() {
+      checkConditions();
+      const allValid = Array.from(document.querySelectorAll("ul li"))
+        .every(li => li.classList.contains("valid"));
+
+      if (allValid) {
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const phone = document.getElementById("phone").value;
+        const password = document.getElementById("currentPassword").value;
+
+        alert(
+          `Entered Details:\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nPassword: ${password}`
+        );
+        return false;
+      } else {
+        alert("Please fill all fields correctly.");
+        return false;
+      }
+    }
+  </script>
+</body>
+</html>
